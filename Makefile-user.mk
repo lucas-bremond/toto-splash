@@ -31,7 +31,7 @@ SMING_HOME = /opt/Sming/Sming
 
 ## MacOS / Linux:
 # COM_PORT = /dev/tty.usbserial
-COM_PORT = /dev/tty.USB0
+COM_PORT = /dev/ttyUSB0
 # COM_PORT = /dev/tty.SLAB_USBtoUART
 # COM_PORT = /dev/tty.wchusbserialfd120
 # COM_PORT = /dev/cu.wchusbserialfa130

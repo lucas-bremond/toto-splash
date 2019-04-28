@@ -37,7 +37,8 @@ namespace TotoSplash
 bool							Application::isActive						( ) const
 {
 	// return wifiManager_.isActive() || timeManager_.isActive() || serverManager_.isActive() || taskManager_.isActive() ;
-	return wifiManager_.isActive() || timeManager_.isActive() || taskManager_.isActive() ;
+	return wifiManager_.isActive() || timeManager_.isActive() || serverManager_.isActive() ;
+	// return wifiManager_.isActive() || timeManager_.isActive() || taskManager_.isActive() ;
 }
 
 void							Application::start							( )
@@ -51,52 +52,52 @@ void							Application::start							( )
 
 	Serial.begin(SERIAL_BAUD_RATE) ;
 	Serial.systemDebugOutput(true) ;
-	
+
 	// set timezone hourly difference to UTC
 	// SystemClock.setTimeZone(2);
 
 	// Status timer setup
 
-	if (statusTimerEnabled_)
-	{
+	// if (statusTimerEnabled_)
+	// {
 
-		statusTimer_.initializeMs(1000, Delegate<void()>(&Application::onPrintStatus, this)) ; // TBM param
-		
-		statusTimer_.start() ;
-	
-	}
+	// 	statusTimer_.initializeMs(1000, Delegate<void()>(&Application::onPrintStatus, this)) ; // TBM param
 
-	// WiFi client setup
+	// 	statusTimer_.start() ;
 
-	if (!wifiManager_.isActive())
-	{
+	// }
 
-		wifiManager_.associateApplicationStorage(applicationStorage_) ;
+	// // WiFi client setup
 
-		wifiManager_.setConnectionSuccessHandler(Delegate<void()>(&Application::onWifiConnectionSuccess, this)) ;
-		wifiManager_.setConnectionFailureHandler(Delegate<void()>(&Application::onWifiConnectionFailure, this)) ;
+	// if (!wifiManager_.isActive())
+	// {
 
-		wifiManager_.setMode(WiFiManager::Mode::Station) ;
-		// wifiManager_.setMode(WiFiManager::Mode::AccessPoint) ;
-		
-		wifiManager_.start() ;
+	// 	wifiManager_.associateApplicationStorage(applicationStorage_) ;
 
-	}
+	// 	wifiManager_.setConnectionSuccessHandler(Delegate<void()>(&Application::onWifiConnectionSuccess, this)) ;
+	// 	wifiManager_.setConnectionFailureHandler(Delegate<void()>(&Application::onWifiConnectionFailure, this)) ;
+
+	// 	wifiManager_.setMode(WiFiManager::Mode::Station) ;
+	// 	// wifiManager_.setMode(WiFiManager::Mode::AccessPoint) ;
+
+	// 	wifiManager_.start() ;
+
+	// }
 
 }
 
 void							Application::stop							( )
 {
 
-	if (taskManager_.isActive())
-	{
-		taskManager_.stop() ;
-	}
-
-	// if (serverManager_.isActive())
+	// if (taskManager_.isActive())
 	// {
-	// 	serverManager_.stop() ;
+	// 	taskManager_.stop() ;
 	// }
+
+	if (serverManager_.isActive())
+	{
+		serverManager_.stop() ;
+	}
 
 	if (timeManager_.isActive())
 	{
@@ -127,10 +128,10 @@ void							Application::onWifiConnectionSuccess		( )
 
 	// Server manager setup
 
-	// if (!serverManager_.isActive())
-	// {
-	// 	serverManager_.start() ;
-	// }
+	if (!serverManager_.isActive())
+	{
+		serverManager_.start() ;
+	}
 
 	// Time manager setup
 
@@ -138,7 +139,7 @@ void							Application::onWifiConnectionSuccess		( )
 	{
 
 		timeManager_.setClockSetHandler(Delegate<void()>(&Application::onClockSet, this)) ;
-		
+
 		timeManager_.start() ;
 
 	}
@@ -148,10 +149,10 @@ void							Application::onWifiConnectionSuccess		( )
 void							Application::onWifiConnectionFailure		( )
 {
 
-	// if (serverManager_.isActive())
-	// {
-	// 	serverManager_.stop() ;
-	// }
+	if (serverManager_.isActive())
+	{
+		serverManager_.stop() ;
+	}
 
 	if (timeManager_.isActive())
 	{
@@ -165,16 +166,16 @@ void							Application::onClockSet						( )
 
 	// Task manager setup
 
-	if (!taskManager_.isActive())
-	{
+	// if (!taskManager_.isActive())
+	// {
 
-		// serverManager_.associateTaskManager(taskManager_) ;
+	// 	// serverManager_.associateTaskManager(taskManager_) ;
 
-		taskManager_.associateApplicationStorage(applicationStorage_) ;
-		
-		taskManager_.start() ;
+	// 	taskManager_.associateApplicationStorage(applicationStorage_) ;
 
-	}
+	// 	taskManager_.start() ;
+
+	// }
 
 }
 

@@ -56,8 +56,8 @@ class Application
 		ApplicationStorage		applicationStorage_ ;
 		WiFiManager				wifiManager_ ;
 		TimeManager				timeManager_ ;
-		// ServerManager			serverManager_ ;
-		TaskManager				taskManager_ ;
+		ServerManager			serverManager_ ;
+		// TaskManager				taskManager_ ;
 
 		void					onPrintStatus								( ) ;
 

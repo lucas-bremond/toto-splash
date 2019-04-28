@@ -10,7 +10,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <TotoSplash/applicationStorage.hpp>
+#include <TotoSplash/ApplicationStorage.hpp>
 
 #include <TotoSplash/WiFiManager.hpp>
 
@@ -41,11 +41,11 @@ void listNetworks(bool succeeded, BssList list)
 }
 
 // Will be called when WiFi station was connected to AP
-void connectOk(IPAddress ip, IPAddress mask, IPAddress gateway)
-{
-	debugf("I'm CONNECTED");
-	Serial.println(ip.toString());
-}
+// void connectOk(IPAddress ip, IPAddress mask, IPAddress gateway)
+// {
+// 	debugf("I'm CONNECTED");
+// 	Serial.println(ip.toString());
+// }
 
 // Will be called when WiFi station was disconnected
 void connectFail(String ssid, uint8_t ssidLength, uint8_t* bssid, uint8_t reason)
@@ -126,13 +126,13 @@ void							WiFiManager::start							( )
 
 	// Optional: Change IP addresses (and disable DHCP)
 	WifiAccessPoint.setIP(IPAddress(192, 168, 2, 1));
-	WifiStation.setIP(IPAddress(192, 168, 1, 171));
+	// WifiStation.setIP(IPAddress(192, 168, 1, 171));
 
 	// Print available access points
 	WifiStation.startScan(listNetworks); // In Sming we can start network scan from init method without additional code
 
 	// Set callback that should be triggered when we have assigned IP
-	WifiEvents.onStationGotIP(connectOk);
+	WifiEvents.onStationGotIP(Delegate<void(IPAddress, IPAddress, IPAddress)>(&WiFiManager::onConnectionSuccess, this)) ;
 
 	// Set callback that should be triggered if we are disconnected or connection attempt failed
 	WifiEvents.onStationDisconnect(connectFail);
@@ -168,19 +168,19 @@ void							WiFiManager::associateApplicationStorage	(			ApplicationStorage&			an
 
 void							WiFiManager::setConnectionSuccessHandler	(			Delegate<void()>			aDelegate							)
 {
-	connectionSuccessHandler_													=		aDelegate ;	
+	connectionSuccessHandler_													=		aDelegate ;
 }
 
 void							WiFiManager::setConnectionFailureHandler	(			Delegate<void()>			aDelegate							)
 {
-	connectionFailureHandler_													=		aDelegate ;	
+	connectionFailureHandler_													=		aDelegate ;
 }
 
 void							WiFiManager::startmDNS						( )
 {
 
 	struct mdns_info*			info											=		(struct mdns_info*)os_zalloc(sizeof(struct mdns_info)) ;
-	
+
 	info->host_name																=		(char*) "TotoSplash" ;
 	info->ipAddr																=		WifiStation.getIP() ;
 	info->server_name															=		(char*) "Sming" ;
@@ -191,7 +191,9 @@ void							WiFiManager::startmDNS						( )
 
 }
 
-void							WiFiManager::onConnectionSuccess			( )
+void							WiFiManager::onConnectionSuccess			(			IPAddress					anIp,
+																						IPAddress					aMask,
+																						IPAddress					aGateway									)
 {
 
 	if (!active_)

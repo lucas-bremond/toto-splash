@@ -45,7 +45,6 @@ class ServerManager
 		uint					port_ ;
 
 		HttpServer*				serverPtr_ ;
-
 		TaskManager*			taskManagerPtr_ ;
 
 		void					onIndex										(			HttpRequest&				aRequest,

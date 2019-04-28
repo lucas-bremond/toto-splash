@@ -73,7 +73,10 @@ class WiFiManager
 
 		void					startmDNS									( ) ;
 
-		void					onConnectionSuccess							( ) ;
+		void					onConnectionSuccess							(			IPAddress					anIp,
+																						IPAddress					aMask,
+																						IPAddress					aGateway									) ;
+
 		void					onConnectionFailure							( ) ;
 
 } ;
